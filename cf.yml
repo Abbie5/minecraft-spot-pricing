@@ -170,6 +170,10 @@ Parameters:
     Type: String
     Description: "Change the server's timezone. Use the canonical name of the format: Area/Location (e.g. America/New_York)"
 
+  PackwizUrl:
+    Type: String
+    Description: "Set a packwiz pack.toml URL to automatically update the server from that pack."
+
 Metadata:
   AWS::CloudFormation::Interface:
     ParameterGroups:
@@ -199,6 +203,7 @@ Metadata:
         - LevelType
         - EnableRollingLogs
         - Timezone
+        - PackwizUrl
       - Label:
           default: Optional ECS Cluster and Task Configuration
         Parameters:
@@ -276,6 +281,8 @@ Metadata:
         default: "Whether to enable rolling logs"
       Timezone:
         default: "The server's timezone"
+      PackwizUrl:
+        default: "Packwiz pack.toml URL for packwiz pack."
 
 Conditions:
   MinecraftTypeTagProvided: !Not [ !Equals [ !Ref MinecraftTypeTag, '' ] ]
@@ -300,6 +307,7 @@ Conditions:
   LevelTypeProvided: !Not [ !Equals [ !Ref LevelType, '' ] ]
   EnableRollingLogsProvided: !Not [ !Equals [ !Ref EnableRollingLogs, '' ] ]
   TimezoneProvided: !Not [ !Equals [ !Ref Timezone, '' ] ]
+  PackwizUrlProvided: !Not [ !Equals [ !Ref PackwizUrl, '' ] ]
 
 
 Mappings:
@@ -655,6 +663,11 @@ Resources:
               - TimezoneProvided
               - Name: "TZ"
                 Value: !Sub "${Timezone}"
+              - !Ref 'AWS::NoValue'
+            - !If
+              - PackwizUrlProvided
+              - Name: "PACKWIZ_URL"
+                Value: !Sub "${PackwizUrl}"
               - !Ref 'AWS::NoValue'
 
   CloudWatchLogGroup:
