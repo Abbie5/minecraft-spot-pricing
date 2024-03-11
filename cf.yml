@@ -105,6 +105,14 @@ Parameters:
     - normal
     - hard
 
+  Hardcore:
+    Type: String
+    Description: "Enable hardcore mode"
+    Default: "false"
+    AllowedValues:
+    - true
+    - false
+  
   Whitelist:
     Type: String
     Description: Usernames of your friends
@@ -193,6 +201,7 @@ Metadata:
         - MinecraftTypeTag
         - AdminPlayerNames
         - Difficulty
+        - Hardcore
         - Whitelist
         - MinecraftVersion
         - Memory
@@ -239,6 +248,8 @@ Metadata:
         default: "A comma delimited list (no spaces) of player names to be admins"
       Difficulty:
         default: "Which difficulty?"
+      Harcore:
+        default: "If set to true, players will be set to spectator mode if they die."
       Whitelist:
         default: "A comma delimited list (no spaces) of player names"
       MinecraftVersion:
@@ -288,6 +299,7 @@ Conditions:
   MinecraftTypeTagProvided: !Not [ !Equals [ !Ref MinecraftTypeTag, '' ] ]
   AdminPlayerNamesProvided: !Not [ !Equals [ !Ref AdminPlayerNames, '' ] ]
   DifficultyProvided: !Not [ !Equals [ !Ref Difficulty, '' ] ]
+  HardcoreProvided: !Not [ !Equals [ !Ref Hardcore, '' ] ]
   WhitelistProvided: !Not [ !Equals [ !Ref Whitelist, '' ] ]
   MinecraftVersionProvided: !Not [ !Equals [ !Ref MinecraftVersion, '' ] ]
   EntryPointProvided: !Not [ !Equals [ !Join [ "", !Ref EntryPoint ], '' ] ]
@@ -613,6 +625,11 @@ Resources:
               - DifficultyProvided
               - Name: "DIFFICULTY"
                 Value: !Sub "${Difficulty}"
+              - !Ref 'AWS::NoValue'
+            - !If
+              - HardcoreProvided
+              - Name: "HARDCORE"
+                Value: !Sub "${Hardcore}"
               - !Ref 'AWS::NoValue'
             - !If
               - WhitelistProvided
