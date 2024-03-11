@@ -248,7 +248,7 @@ Metadata:
         default: "A comma delimited list (no spaces) of player names to be admins"
       Difficulty:
         default: "Which difficulty?"
-      Harcore:
+      Hardcore:
         default: "If set to true, players will be set to spectator mode if they die."
       Whitelist:
         default: "A comma delimited list (no spaces) of player names"
